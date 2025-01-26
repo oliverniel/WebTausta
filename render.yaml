@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: FullStack-Frontend
+    env: node
+    buildCommand: (cd frontend && npm install && npm run build)
+    startCommand: serve -s frontend/build
+    staticPublishPath: frontend/build
+    branch: main
+    autoDeploy: true
+
+  - type: web
+    name: FullStack-Backend
+    env: node
+    buildCommand: (cd backend && npm install)
+    startCommand: node backend/index.js
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: FRONTEND_URL
+        value: https://fullstack-frontend.onrender.com
