@@ -1,11 +1,25 @@
 services:
   - type: web
-    name: MyWebApp
-    env: node  # Vaihda sopivaan ympäristöön, esim. python, ruby, static
-    buildCommand: npm install && npm run build  # Vaihda build-komento
-    startCommand: npm start                     # Vaihda start-komento
-    envVars:
-      - key: ENVIRONMENT
-        value: production
-    branch: main  # Määritä haara, jonka Render seuraa
+    name: FullStack-Frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: serve -s build
+    branch: main
+    staticPublishPath: build
     autoDeploy: true
+
+  - type: web
+    name: FullStack-Backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: MONGO_URL
+        value: <mongodb_connection_string>
+      - key: PORT
+        value: 8080
+      - key: FRONTEND_URL
+        value: https://fullstack-frontend.onrender.com
+
