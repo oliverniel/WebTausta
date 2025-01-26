@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: MyWebApp
+    env: node  # Vaihda sopivaan ympäristöön, esim. python, ruby, static
+    buildCommand: npm install && npm run build  # Vaihda build-komento
+    startCommand: npm start                     # Vaihda start-komento
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+    branch: main  # Määritä haara, jonka Render seuraa
+    autoDeploy: true
