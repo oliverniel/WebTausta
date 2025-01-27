@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 
 let notes = [
     {
@@ -35,10 +36,11 @@ app.get('/api/notes', (request, response) => {
 app.get('/api/notes/:id', (request, response) => {
   const id = request.params.id
   const note = notes.find(note => note.id === id)
+    
   if (note) {
-    response.json(note)
+    response.json(note)  // Jos muistiinpano löytyy
   } else {
-    response.status(404).end()
+    response.status(404).json({ error: 'Note not found' })  // Palautetaan virhe, jos ei löydy
   }
 })
 
@@ -70,12 +72,37 @@ app.post('/api/notes', (request, response) => {
     important: body.important || false,
     id: generateId(),
   }
-  note = notes.concat(note)
+  notes = notes.concat(note)
 
   response.json(note)
 })
+
+app.put('/api/notes/:id', (request, response) => {
+  const { id } = request.params;
+  const body = request.body;
+
+  // Etsi muistiinpano ID:n perusteella
+  const noteIndex = notes.findIndex(note => note.id === id);
+
+  if (noteIndex === -1) {
+    // Jos muistiinpanoa ei löydy, palautetaan 404
+    return response.status(404).json({ error: 'Note not found' });
+  }
+
+  // Päivitetään muistiinpano
+  const updatedNote = {
+    ...notes[noteIndex],  // säilytetään vanhat tiedot
+    content: body.content,
+    important: body.important || false,
+  };
+
+  notes[noteIndex] = updatedNote;  // Korvataan vanha muistiinpano uudella
+
+  response.json(updatedNote);  // Palautetaan päivitetty muistiinpano
+});
   
   const PORT = process.env.PORT || 3001
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
+
