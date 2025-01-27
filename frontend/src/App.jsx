@@ -35,11 +35,15 @@ const App = () => {
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
+    const changedNote = { 
+      ...note, 
+      important: !note.important,
+      content: note.content // Varmista, että content kenttä on mukana
+    }
   
     noteService
       .update(id, changedNote)
-        .then(returnedNote => {
+      .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch(error => {
@@ -51,6 +55,7 @@ const App = () => {
         }, 5000)
       })
   }
+  
 
   const handleNoteChange = (event) => {
     setNewNote(event.target.value)
