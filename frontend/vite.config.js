@@ -11,8 +11,8 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-    port: process.env.PORT || 3000,
-    host: '0.0.0.0',
+    port: process.env.PORT || 3001,
+    host: true,
     preview: {
       allowedHosts: ['webtausta.onrender.com']
     },
